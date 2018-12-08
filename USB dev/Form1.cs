@@ -26,7 +26,7 @@ namespace WindowsFormsApp1
 
         #region SET YOUR USB Vendor and Product ID!
 
-        public UsbDeviceFinder MyUsbFinder = new UsbDeviceFinder(1155, 22352);
+        public UsbDeviceFinder MyUsbFinder;// = new UsbDeviceFinder(0x0403, 0xa6d1);
         public IDeviceNotifier UsbDeviceNotifier = DeviceNotifier.OpenDeviceNotifier();
 
         #endregion
@@ -194,11 +194,11 @@ namespace WindowsFormsApp1
                     // This is a "whole" USB device. Before it can be used, 
                     // the desired configuration and interface must be selected.
 
-                    // Select config #1
-                    wholeUsbDevice.SetConfiguration(1);
-
                     // Claim interface #0.
                     wholeUsbDevice.ClaimInterface(0);
+
+                    // Select config #1
+                    wholeUsbDevice.SetConfiguration(1);
                 }
 
                 // open read endpoint 1.
@@ -381,8 +381,9 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void Init_Click(object sender, EventArgs e)
+        private void ButtonInit_Click(object sender, EventArgs e)
         {
+            MyUsbFinder = new UsbDeviceFinder(Convert.ToInt32(textBoxVID.Text, 16), Convert.ToInt32(textBoxPID.Text, 16));
             // Hook the device notifier event
             UsbDeviceNotifier.OnDeviceNotify += OnDeviceNotifyEvent;
 
